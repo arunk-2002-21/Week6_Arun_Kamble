@@ -1,8 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../postgresDB/pgConfig";
-import Book from "./book";
-import User from "./user";
-
+import { v4 as uuidv4 } from 'uuid';
 
 interface RatingAttributes{
     id?: string;
@@ -12,7 +10,7 @@ interface RatingAttributes{
 }
 
 class Rating extends Model<RatingAttributes> implements RatingAttributes {
-    public id!: string;
+    public id?: string;
     public userId!: string;
     public bookId!: string;
     public rating!: number;
@@ -20,9 +18,9 @@ class Rating extends Model<RatingAttributes> implements RatingAttributes {
 
 Rating.init({
     id:{
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: uuidv4()
     },
     userId:{
       type: DataTypes.STRING,
@@ -39,12 +37,9 @@ Rating.init({
     },
     {
         sequelize,
-        tableName:'rating'
+        tableName:'Ratings'
     }
 
 );
 
-Rating.belongsTo(User, { foreignKey: 'userId' });
-Rating.belongsTo(Book, { foreignKey: 'bookId' });
-
-export default Rating;
+export  {Rating};

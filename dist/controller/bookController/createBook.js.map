@@ -1,0 +1,1 @@
+{"version":3,"file":"createBook.js","sourceRoot":"","sources":["../../../src/controller/bookController/createBook.ts"],"names":[],"mappings":";;;;;;;;;;;;AACA,qEAA+D;AAGxD,MAAM,aAAa,GAAG,CAAO,GAAY,EAAE,GAAa,EAAE,EAAE;IAC/D,MAAM,IAAI,GAAG,MAAM,IAAA,oBAAO,EAAC,GAAG,CAAC,IAAI,CAAC,CAAC;IACrC,GAAG,CAAC,IAAI,CAAC,IAAI,CAAC,CAAC;AACnB,CAAC,CAAA,CAAA;AAHY,QAAA,aAAa,iBAGzB"}

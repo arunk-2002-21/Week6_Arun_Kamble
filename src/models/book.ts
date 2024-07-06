@@ -1,42 +1,40 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../postgresDB/pgConfig";
-import Author from "./author";
-import Payment from "./payment";
-import Rating from "./rating";
-import Review from "./review";
-
+import { v4 as uuidv4 } from 'uuid';
+import { User } from "./user";
+import {Author} from "./author";
+import { Payment } from "./payment";
+import { Review } from "./review";
+import { Rating } from "./rating";
 
 interface BookAttributes{
     id?: string;
     bookCode: string;
     title: string;
     description: string;
-    publishedYear: Date;
+    publishedYear: number;
     price: number;
-    authors: string;
+    authors: string [];
     externalId: string;
 }
 
 class Book extends Model<BookAttributes> implements BookAttributes {
-    static findById(bookId: any) {
-      throw new Error('Method not implemented.');
-    }
     public id!: string;
     public bookCode!: string;
     public title!: string;
     public description!: string;
-    public publishedYear!: Date;   
+    public publishedYear!: number;   
     public price!: number;    
-    public authors!: string;    
+    public authors!: string [];    
     public externalId!: string;    
 
 }
 
 Book.init({
     id:{
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: uuidv4()
     },
     bookCode:{
       type: DataTypes.STRING,
@@ -51,7 +49,7 @@ Book.init({
         allowNull: false,
     },
     publishedYear:{
-        type: DataTypes.DATE,
+        type: DataTypes.INTEGER,
         allowNull: false,
     },
     price: {
@@ -59,7 +57,7 @@ Book.init({
         allowNull: false,
     },
     authors: {
-        type: DataTypes.STRING,
+        type: DataTypes.JSONB,
         allowNull: false,
     },
     externalId: {
@@ -69,14 +67,46 @@ Book.init({
     },
     {
         sequelize,
-        tableName:'book'
+        tableName:'Books'
     }
-
 );
 
-Book.belongsToMany(Author, { through: 'BookAuthors' });
-Book.hasMany(Review, { foreignKey: 'bookId' });
-Book.hasMany(Rating, { foreignKey: 'bookId' });
-Book.hasMany(Payment, { foreignKey: 'bookId' });
+Book.hasMany(Author)
+Author.hasMany(Book)
+Book.belongsTo(Author)
+Author.belongsTo(Book)
+Book.hasMany(Review, {
+    foreignKey : 'bookId'
+})
+Review.belongsTo(Book, {
+    foreignKey : 'bookId'
+})
+Book.hasMany(Rating, {
+    foreignKey : 'bookId'
+})
+User.hasMany(Review, {
+    foreignKey : 'userId'
+})
+Review.belongsTo(User, {
+    foreignKey : 'userId'
+})
+User.hasMany(Rating, {
+    foreignKey : 'userId'
+})
+Rating.belongsTo(User, {
+    foreignKey : 'userId'
+})
+User.hasMany(Payment, {
+    foreignKey: 'userId'
+})
+Payment.belongsTo(User, {
+    foreignKey : 'userId'
+})
+Book.hasMany(Payment, {
+    foreignKey: 'bookId'
+})
+Payment.belongsTo(Book, {
+    foreignKey: 'bookId'
+})
 
-export default Book;
+export {Book}

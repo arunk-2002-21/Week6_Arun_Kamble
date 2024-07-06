@@ -1,37 +1,28 @@
-import { Model, DataTypes } from "sequelize";
+import {DataTypes, Model } from "sequelize";
 import sequelize from "../postgresDB/pgConfig";
-import Payment from "./payment";
-import Rating from "./rating";
-import Review from "./review";
-
+import { v4 as uuidv4 } from 'uuid';
 
 interface UserAttributes{
     id?: string;
     username: string;
     password: string;
     email: string;
+    isAdmin : boolean
 }
 
 class User extends Model<UserAttributes> implements UserAttributes {
-    comparePassword(password: any) {
-      throw new Error('Method not implemented.');
-    }
-    _id: any;
-    role: any;
-    static findById(id: any) {
-      throw new Error('Method not implemented.');
-    }
-    public id!: string;
+    public id?: string;
     public username!: string;
     public password!: string;
     public email!: string;
+    public isAdmin!: boolean;
 }
 
 User.init({
     id:{
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: uuidv4()
     },
     username:{
       type: DataTypes.STRING,
@@ -45,17 +36,17 @@ User.init({
         type: DataTypes.INTEGER,
         allowNull: false,
         unique: true
+    },
+    isAdmin:{
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
     }
     },
     {
         sequelize,
-        tableName:'user'
+        tableName:'Users'
     }
 
 );
 
-User.hasMany(Review, { foreignKey: 'userId' });
-User.hasMany(Rating, { foreignKey: 'userId' });
-User.hasMany(Payment, { foreignKey: 'userId' });
-
-export default User;
+export {User}

@@ -3,17 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Rating = void 0;
 const sequelize_1 = require("sequelize");
 const pgConfig_1 = __importDefault(require("../postgresDB/pgConfig"));
-const book_1 = __importDefault(require("./book"));
-const user_1 = __importDefault(require("./user"));
+const uuid_1 = require("uuid");
 class Rating extends sequelize_1.Model {
 }
+exports.Rating = Rating;
 Rating.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
-        defaultValue: sequelize_1.DataTypes.UUIDV4
+        defaultValue: (0, uuid_1.v4)()
     },
     userId: {
         type: sequelize_1.DataTypes.STRING,
@@ -29,9 +30,6 @@ Rating.init({
     }
 }, {
     sequelize: pgConfig_1.default,
-    tableName: 'rating'
+    tableName: 'Ratings'
 });
-Rating.belongsTo(user_1.default, { foreignKey: 'userId' });
-Rating.belongsTo(book_1.default, { foreignKey: 'bookId' });
-exports.default = Rating;
 //# sourceMappingURL=rating.js.map

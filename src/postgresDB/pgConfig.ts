@@ -1,20 +1,14 @@
 import { Sequelize } from "sequelize";
-// import credentails from "../common/credentails";
+import credentails from "../common/credentails";
 
 
 const sequelize = new Sequelize({
-    // username: credentails.postgres.USERNAME,
-    // host: credentails.postgres.HOST,
-    // database: credentails.postgres.DATABASE,
-    // password: credentails.postgres.PASSWORD,
-    // port: credentails.postgres.PORT,
 
-    username: 'postgres',
-    host: 'localhost',
-    database: "Bookstore",
-    password: "sqlpg24",
+    username: credentails.postgres.USERNAME,
+    database: credentails.postgres.DATABASE,
+    password: credentails.postgres.PASSWORD,
+    host: "localhost",
     port: 5432,
-
     dialect: "postgres",
 })
 

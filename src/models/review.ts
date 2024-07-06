@@ -1,8 +1,6 @@
 import { Model, DataTypes } from "sequelize";
 import sequelize from "../postgresDB/pgConfig";
-import Book from "./book";
-import User from "./user";
-
+import { v4 as uuidv4 } from 'uuid';
 
 interface ReviewAttributes{
     id?: string;
@@ -12,13 +10,7 @@ interface ReviewAttributes{
 }
 
 class Review extends Model<ReviewAttributes> implements ReviewAttributes {
-    static find(arg0: { bookId: string; }) {
-      throw new Error('Method not implemented.');
-    }
-    static findById(id: string) {
-      throw new Error('Method not implemented.');
-    }
-    public id!: string;
+    public id?: string;
     public userId!: string;
     public bookId!: string;
     public content!: string;
@@ -26,9 +18,9 @@ class Review extends Model<ReviewAttributes> implements ReviewAttributes {
 
 Review.init({
     id:{
-        type: DataTypes.UUID,
+        type: DataTypes.STRING,
         primaryKey: true,
-        defaultValue: DataTypes.UUIDV4
+        defaultValue: uuidv4()
     },
     userId:{
       type: DataTypes.STRING,
@@ -41,17 +33,13 @@ Review.init({
     content:{
         type: DataTypes.INTEGER,
         allowNull: false,
-        unique: true
     }
     },
     {
         sequelize,
-        tableName:'review'
+        tableName:'Reviews'
     }
 
 );
 
-Review.belongsTo(User, { foreignKey: 'userId' });
-Review.belongsTo(Book, { foreignKey: 'bookId' });
-
-export default Review;
+export {Review};

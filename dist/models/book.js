@@ -3,22 +3,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Book = void 0;
 const sequelize_1 = require("sequelize");
 const pgConfig_1 = __importDefault(require("../postgresDB/pgConfig"));
-const author_1 = __importDefault(require("./author"));
-const payment_1 = __importDefault(require("./payment"));
-const rating_1 = __importDefault(require("./rating"));
-const review_1 = __importDefault(require("./review"));
+const uuid_1 = require("uuid");
+const user_1 = require("./user");
+const author_1 = require("./author");
+const payment_1 = require("./payment");
+const review_1 = require("./review");
+const rating_1 = require("./rating");
 class Book extends sequelize_1.Model {
-    static findById(bookId) {
-        throw new Error('Method not implemented.');
-    }
 }
+exports.Book = Book;
 Book.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
-        defaultValue: sequelize_1.DataTypes.UUIDV4
+        defaultValue: (0, uuid_1.v4)()
     },
     bookCode: {
         type: sequelize_1.DataTypes.STRING,
@@ -32,8 +33,8 @@ Book.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
     },
-    pusblishedYear: {
-        type: sequelize_1.DataTypes.DATE,
+    publishedYear: {
+        type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
     },
     price: {
@@ -41,7 +42,7 @@ Book.init({
         allowNull: false,
     },
     authors: {
-        type: sequelize_1.DataTypes.STRING,
+        type: sequelize_1.DataTypes.JSONB,
         allowNull: false,
     },
     externalId: {
@@ -50,11 +51,43 @@ Book.init({
     }
 }, {
     sequelize: pgConfig_1.default,
-    tableName: 'book'
+    tableName: 'Books'
 });
-Book.belongsToMany(author_1.default, { through: 'BookAuthors' });
-Book.hasMany(review_1.default, { foreignKey: 'bookId' });
-Book.hasMany(rating_1.default, { foreignKey: 'bookId' });
-Book.hasMany(payment_1.default, { foreignKey: 'bookId' });
-exports.default = Book;
+Book.hasMany(author_1.Author);
+author_1.Author.hasMany(Book);
+Book.belongsTo(author_1.Author);
+author_1.Author.belongsTo(Book);
+Book.hasMany(review_1.Review, {
+    foreignKey: 'bookId'
+});
+review_1.Review.belongsTo(Book, {
+    foreignKey: 'bookId'
+});
+Book.hasMany(rating_1.Rating, {
+    foreignKey: 'bookId'
+});
+user_1.User.hasMany(review_1.Review, {
+    foreignKey: 'userId'
+});
+review_1.Review.belongsTo(user_1.User, {
+    foreignKey: 'userId'
+});
+user_1.User.hasMany(rating_1.Rating, {
+    foreignKey: 'userId'
+});
+rating_1.Rating.belongsTo(user_1.User, {
+    foreignKey: 'userId'
+});
+user_1.User.hasMany(payment_1.Payment, {
+    foreignKey: 'userId'
+});
+payment_1.Payment.belongsTo(user_1.User, {
+    foreignKey: 'userId'
+});
+Book.hasMany(payment_1.Payment, {
+    foreignKey: 'bookId'
+});
+payment_1.Payment.belongsTo(Book, {
+    foreignKey: 'bookId'
+});
 //# sourceMappingURL=book.js.map

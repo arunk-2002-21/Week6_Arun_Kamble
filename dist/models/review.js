@@ -3,23 +3,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Review = void 0;
 const sequelize_1 = require("sequelize");
 const pgConfig_1 = __importDefault(require("../postgresDB/pgConfig"));
-const book_1 = __importDefault(require("./book"));
-const user_1 = __importDefault(require("./user"));
+const uuid_1 = require("uuid");
 class Review extends sequelize_1.Model {
-    static find(arg0) {
-        throw new Error('Method not implemented.');
-    }
-    static findById(id) {
-        throw new Error('Method not implemented.');
-    }
 }
+exports.Review = Review;
 Review.init({
     id: {
-        type: sequelize_1.DataTypes.UUID,
+        type: sequelize_1.DataTypes.STRING,
         primaryKey: true,
-        defaultValue: sequelize_1.DataTypes.UUIDV4
+        defaultValue: (0, uuid_1.v4)()
     },
     userId: {
         type: sequelize_1.DataTypes.STRING,
@@ -32,13 +27,9 @@ Review.init({
     content: {
         type: sequelize_1.DataTypes.INTEGER,
         allowNull: false,
-        unique: true
     }
 }, {
     sequelize: pgConfig_1.default,
-    tableName: 'review'
+    tableName: 'Reviews'
 });
-Review.belongsTo(user_1.default, { foreignKey: 'userId' });
-Review.belongsTo(book_1.default, { foreignKey: 'bookId' });
-exports.default = Review;
 //# sourceMappingURL=review.js.map
